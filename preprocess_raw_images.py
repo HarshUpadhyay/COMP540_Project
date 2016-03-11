@@ -29,4 +29,3 @@ labels.close()
 #data = open('pickle_dump.dat', 'r')
 #data = pickle.load(data)
 #X, y = data['data'], data['labels']
-print "done"
