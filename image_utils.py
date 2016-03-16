@@ -73,54 +73,6 @@ def load_CIFAR10(cifar10_root):
     return Xtr, Ytr, Xte, Yte
 
 
-# Visualize some examples from the dataset.
-# We show a few examples of training images from each class.
-
-def visualize_cifar10(X_train, y_train):
-    classes = ['plane', 'auto', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-    num_classes = len(classes)
-    samples_per_class = 7
-    for y, cls in enumerate(classes):
-        indices = np.flatnonzero(y_train == y)
-        indices = np.random.choice(indices, samples_per_class, replace=False)
-        for i, idx in enumerate(indices):
-            plt_idx = i * num_classes + y + 1
-            plt.subplot(samples_per_class, num_classes, plt_idx)
-            plt.imshow(X_train[idx].astype('uint8'))
-            plt.axis('off')
-            if i == 0:
-                plt.title(cls)
-    plt.savefig('cifar10_samples.pdf')
-    plt.close()
-
-
-# subsampling  the data
-
-
-def subsample(num_training, num_validation, num_test, X_train, y_train, X_test, y_test):
-    # Our validation set will be num_validation points from the original
-    # training set.
-
-    mask = range(num_training, num_training + num_validation)
-    X_val = X_train[mask]
-    y_val = y_train[mask]
-
-    # Our training set will be the first num_train points from the original
-    # training set.
-    mask = range(num_training)
-    X_train = X_train[mask]
-    y_train = y_train[mask]
-
-    # We use the first num_test points of the original test set as our
-    # test set.
-
-    mask = range(num_test)
-    X_test = X_test[mask]
-    y_test = y_test[mask]
-
-    return X_train, y_train, X_val, y_val, X_test, y_test
-
-
 def preprocess(X_train, X_val, X_test):
     # Preprocessing: reshape the image data into rows
 
