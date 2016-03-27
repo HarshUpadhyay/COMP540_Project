@@ -31,7 +31,7 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
         y.append(label_dict[labels.readline().strip().split(",")[1]])
 
     dmp = open(output_file_name, 'w')
-    cPickle.dump({'data': np.array(X), 'labels': np.array(y)}, dmp)
+    cPickle.dump({'data': preprocess_img_data(np.array(X)), 'labels': np.array(y)}, dmp)
     dmp.close()
     labels.close()
 
@@ -42,16 +42,17 @@ def save_test_data_as_vector(output_file_name, input_dir):
     #   1. reads All png files from disk as a vector of 32x32x3 integer matrices.
     #   3. saves this representation into a new file with name given as input
     ##
+
     X = []
     for img in os.listdir(input_dir):
         X.append(imread(img))
 
     dmp = open(output_file_name, 'w')
-    cPickle.dump({'data': np.array(X), 'labels': np.array(y)}, dmp)
+    cPickle.dump({'data': preprocess_img_data(np.array(X))}, dmp)
     dmp.close()
 
 
-def read_img_data(dat_file_name):
+def read_training_data(dat_file_name):
     ##
     #   Reads the pickled image data file and returns the input images and their labels
     ##
@@ -105,3 +106,27 @@ def subsample(num_training, num_validation, num_test, X_train, y_train, X_test, 
     y_test = y_test[mask]
 
     return X_train, y_train, X_val, y_val, X_test, y_test
+
+
+def preprocess_img_data(test_data):
+    ##
+    #   :param test_data: input vector of mx32x32x3 images
+    #   :return:
+    ##
+
+    # flattening the data into a row
+    # test_data = np.reshape(test_data, (test_data.shape[0], -1))
+
+    # mean subtraction
+    test_data -= np.mean(test_data, axis=0)
+
+    # standard deviation normalization
+    test_data /= np.std(test_data, axis=0)
+
+    '''
+    #   SVD whitening
+    cov = np.dot(test_data.T, test_data)/ test_data.shape[0]
+    U,S,V = np.linalg.svd(cov)
+    test_data_rot = np.dot(test_data, U)
+    '''
+    return test_data

@@ -8,5 +8,8 @@ out
 gen
 *.dat
 train
+/train.7z
+/trainLabels.csv
+/test.7z
 test
 # Created by .ignore support plugin (hsz.mobi)
