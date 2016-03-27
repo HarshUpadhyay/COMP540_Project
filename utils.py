@@ -27,7 +27,7 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
     X = []
 
     for img in os.listdir(input_dir):
-        X.append(imread(img))
+        X.append(imread("{}/{}".format(input_dir,img)))
         y.append(label_dict[labels.readline().strip().split(",")[1]])
 
     dmp = open(output_file_name, 'w')
@@ -118,10 +118,10 @@ def preprocess_img_data(test_data):
     # test_data = np.reshape(test_data, (test_data.shape[0], -1))
 
     # mean subtraction
-    test_data -= np.mean(test_data, axis=0)
+    test_data = test_data - np.mean(test_data, axis=0)
 
     # standard deviation normalization
-    test_data /= np.std(test_data, axis=0)
+    test_data = test_data / np.std(test_data, axis=0)
 
     '''
     #   SVD whitening
