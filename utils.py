@@ -22,6 +22,8 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
 
     for i in range(len(c)):
         label_dict[c[i]] = i
+
+    print "\nreading data now...\n"
     
     for img in os.listdir(input_dir):
 
@@ -30,6 +32,7 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
             
         X.append(imread("{}/{}".format(input_dir,img)))
         y.append(label_dict[labels.readline().strip().split(",")[1]])
+        print "read file: {}\r".format(img),
                     
 
     dmp = open(output_file_name, 'w')

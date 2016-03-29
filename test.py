@@ -4,21 +4,27 @@ import numpy as np
 import image_utils
 
 
-utils.save_training_data_as_vector("test.dat", "trainLabels.csv", "test")
-'''
-X, y = utils.read_training_data('')
+utils.save_training_data_as_vector("train.dat", "trainLabels.csv", "train")
+
+print "reading pickled data"
+
+X, y = utils.read_training_data('train.dat')
+
+Xtrain, Xval = X[0:49000], X[49000:50000]
+ytrain, yval = y[0:49000], y[49000:50000]
 
 nn = Classifier(
     layers=[
-        Convolution("Rectifier", channels=16, kernel_shape=(5,5)),
+        Convolution("Rectifier", channels=8, kernel_shape=(3,3)),
         Layer("Softmax")],
-        regularize="L2",
-    n_iter=1000)
-nn.fit(X, y)
+    n_iter=5)
 
-pred = nn.predict(X)
+print "training"
 
-accuracy = np.mean((y == pred).astype(float)) * 100
+nn.fit(Xtrain, ytrain)
 
-print "accuracy: {}".format(accuracy)
-'''
+pred = nn.predict(Xval)
+
+accuracy = np.mean((yval == pred).astype(float)) * 100
+
+print "accuracy on validation set: {}%".format(accuracy)
