@@ -17,3 +17,5 @@ from sklearn.svm import SVC
 #X_train, y_train, X_val, y_val, X_test, y_test = image_utils.get_CIFAR10_data()
 y = imread("")
 print("done")
+
+#Just checking github. 
