@@ -22,13 +22,15 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
 
     for i in range(len(c)):
         label_dict[c[i]] = i
-
-    y = []
-    X = []
-
+    
     for img in os.listdir(input_dir):
+
+        y = []
+        X = []
+            
         X.append(imread("{}/{}".format(input_dir,img)))
         y.append(label_dict[labels.readline().strip().split(",")[1]])
+                    
 
     dmp = open(output_file_name, 'w')
     cPickle.dump({'data': preprocess_img_data(np.array(X)), 'labels': np.array(y)}, dmp)
@@ -43,13 +45,33 @@ def save_test_data_as_vector(output_file_name, input_dir):
     #   3. saves this representation into a new file with name given as input
     ##
 
+    fileNumber = 0
     X = []
-    for img in os.listdir(input_dir):
-        X.append(imread(img))
+    imageCount = 1
 
-    dmp = open(output_file_name, 'w')
+    #print os.listdir(input_dir)
+    for img in os.listdir(input_dir):
+
+        if imageCount == 50000:
+            print "Picking data for file number "+str(fileNumber) + "\n"
+            dmp = open("testData/test"+str(fileNumber)+".dat", 'w')
+            cPickle.dump({'data': preprocess_img_data(np.array(X))}, dmp)
+            dmp.close()
+            X = []
+            imageCount = 1
+            fileNumber = fileNumber + 1
+        else:
+            #print "HERE"
+            #print img
+            print "Reading " + str(img) + "\n"
+            X.append(imread("{}/{}".format(input_dir,img)))
+            imageCount = imageCount + 1
+
+    print "Picking data for file number "+str(fileNumber) + "\n"
+    dmp = open("testData/test"+str(fileNumber)+".dat", 'w')
     cPickle.dump({'data': preprocess_img_data(np.array(X))}, dmp)
     dmp.close()
+    
 
 
 def read_training_data(dat_file_name):
@@ -61,6 +83,19 @@ def read_training_data(dat_file_name):
     data = cPickle.load(data)
     X, y = data['data'], data['labels']
     return X, y
+
+
+def read_test_data(dat_file_name):
+    ##
+    #   Reads the pickled image data file and returns the input images and their labels
+    ##
+
+    data = open(dat_file_name, 'r')
+    data = cPickle.load(data)
+    X = data['data']
+    return X
+
+
 
 
 # Visualize some examples from the dataset.
