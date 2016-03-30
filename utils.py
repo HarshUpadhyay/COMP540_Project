@@ -42,16 +42,16 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
         print "Reading {}".format(img)
 
     dmp = open(output_file_name, 'w')
-    dataValue, dataMean = preprocess_train_data(np.array(X))
+    dataValue, dataMean, dataStdDev = preprocess_train_data(np.array(X))
     cPickle.dump({'data': dataValue, 'labels': np.array(y)}, dmp)
     #cPickle.dump({'data': (np.array(X)), 'labels': np.array(y)}, dmp)
     dmp.close()
     labels.close()
 
-    return dataMean
+    return dataMean, dataStdDev
 
 
-def save_test_data_as_vector(input_dir, ppMean):
+def save_test_data_as_vector(input_dir, ppMean, ppStdDev):
 
     ##
     #   1. reads All png files from disk as a vector of 32x32x3 integer matrices.
@@ -73,7 +73,7 @@ def save_test_data_as_vector(input_dir, ppMean):
         if imageCount == 50000:
             print "Picking data for file number "+str(fileNumber) + "\n"
             dmp = open("testData/test"+str(fileNumber)+".dat", 'w')
-            cPickle.dump({'data': preprocess_test_data(np.array(X), ppMean)}, dmp)
+            cPickle.dump({'data': preprocess_test_data(np.array(X), ppMean, ppStdDev)}, dmp)
             dmp.close()
             X = []
             imageCount = 1
@@ -171,11 +171,14 @@ def preprocess_train_data(train_data):
     # test_data = np.reshape(test_data, (test_data.shape[0], -1))
 
     # mean subtraction
-    meanValue = np.mean(train_data, dtype=np.uint8, axis=0)
+    meanValue = np.mean(train_data, axis=0)
     train_data = train_data - meanValue
 
     # standard deviation normalization
-    #test_data = test_data / np.std(test_data,  dtype=np.uint8, axis=0)
+    stdDev = np.std(train_data,  axis=0)
+    train_data = train_data / stdDev
+
+    train_data = train_data.astype(np.float32)
 
     '''
     #   SVD whitening
@@ -183,9 +186,9 @@ def preprocess_train_data(train_data):
     U,S,V = np.linalg.svd(cov)
     test_data_rot = np.dot(test_data, U)
     '''
-    return train_data, meanValue
+    return train_data, meanValue, stdDev
 
-def preprocess_test_data(test_data, ppMean):
+def preprocess_test_data(test_data, ppMean, ppStdDev):
     ##
     #   :param test_data: input vector of mx32x32x3 images
     #   :return:
@@ -198,8 +201,9 @@ def preprocess_test_data(test_data, ppMean):
     test_data = test_data - ppMean
 
     # standard deviation normalization
-    #test_data = test_data / np.std(test_data,  dtype=np.uint8, axis=0)
+    test_data = test_data / ppStdDev
 
+    test_data = test_data.astype(np.float32)
     '''
     #   SVD whitening
     cov = np.dot(test_data.T, test_data)/ test_data.shape[0]

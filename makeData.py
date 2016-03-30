@@ -4,13 +4,13 @@ import image_utils
 import cPickle
 
 
-meanValue = utils.save_training_data_as_vector("train.dat", "trainLabels.csv", "train")
+meanValue, stdDevValue = utils.save_training_data_as_vector("train.dat", "trainLabels.csv", "train")
 print "Hello"
 X,y=utils.read_training_data('train.dat')
 
 print len(X), len(y)
 
-utils.save_test_data_as_vector("test", meanValue)
+utils.save_test_data_as_vector("test", meanValue, stdDevValue)
 
 
 #plt.imshow(X[0].astype('uint8'))
