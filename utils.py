@@ -18,6 +18,7 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
     labels.readline()
 
     label_dict = {}
+
     c = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
     for i in range(len(c)):
@@ -25,18 +26,24 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
 
     print "\nreading data now...\n"
     
-    for img in os.listdir(input_dir):
+    inputFileList = []
+    for i in range(1,50001):
+        fileName = "{}.png".format(i)
+        inputFileList.append(fileName)
 
-        y = []
-        X = []
+    X = []
+    y = []
+    for img in inputFileList:
             
         X.append(imread("{}/{}".format(input_dir,img)))
+        
         y.append(label_dict[labels.readline().strip().split(",")[1]])
-        print "read file: {}\r".format(img),
-                    
+                      
+        print "Reading {}".format(img)
 
     dmp = open(output_file_name, 'w')
     cPickle.dump({'data': preprocess_img_data(np.array(X)), 'labels': np.array(y)}, dmp)
+    #cPickle.dump({'data': (np.array(X)), 'labels': np.array(y)}, dmp)
     dmp.close()
     labels.close()
 
