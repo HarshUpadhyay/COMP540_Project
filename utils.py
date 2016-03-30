@@ -42,16 +42,20 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
         print "Reading {}".format(img)
 
     dmp = open(output_file_name, 'w')
-    cPickle.dump({'data': preprocess_img_data(np.array(X)), 'labels': np.array(y)}, dmp)
+    dataValue, dataMean = preprocess_train_data(np.array(X))
+    cPickle.dump({'data': dataValue, 'labels': np.array(y)}, dmp)
     #cPickle.dump({'data': (np.array(X)), 'labels': np.array(y)}, dmp)
     dmp.close()
     labels.close()
 
+    return dataMean
 
-def save_test_data_as_vector(output_file_name, input_dir):
+
+def save_test_data_as_vector(input_dir, ppMean):
 
     ##
     #   1. reads All png files from disk as a vector of 32x32x3 integer matrices.
+    #   
     #   3. saves this representation into a new file with name given as input
     ##
 
@@ -69,7 +73,7 @@ def save_test_data_as_vector(output_file_name, input_dir):
         if imageCount == 50000:
             print "Picking data for file number "+str(fileNumber) + "\n"
             dmp = open("testData/test"+str(fileNumber)+".dat", 'w')
-            cPickle.dump({'data': preprocess_img_data(np.array(X))}, dmp)
+            cPickle.dump({'data': preprocess_test_data(np.array(X), ppMean)}, dmp)
             dmp.close()
             X = []
             imageCount = 1
@@ -77,13 +81,13 @@ def save_test_data_as_vector(output_file_name, input_dir):
         else:
             #print "HERE"
             #print img
-            print "Reading " + str(img) + "\n"
+            print "Reading " + str(img) 
             X.append(imread("{}/{}".format(input_dir,img)))
             imageCount = imageCount + 1
 
     print "Picking data for file number "+str(fileNumber) + "\n"
     dmp = open("testData/test"+str(fileNumber)+".dat", 'w')
-    cPickle.dump({'data': preprocess_img_data(np.array(X))}, dmp)
+    cPickle.dump({'data': preprocess_test_data(np.array(X), ppMean)}, dmp)
     dmp.close()
     
 
@@ -157,7 +161,7 @@ def subsample(num_training, num_validation, num_test, X_train, y_train, X_test, 
     return X_train, y_train, X_val, y_val, X_test, y_test
 
 
-def preprocess_img_data(test_data):
+def preprocess_train_data(train_data):
     ##
     #   :param test_data: input vector of mx32x32x3 images
     #   :return:
@@ -167,7 +171,31 @@ def preprocess_img_data(test_data):
     # test_data = np.reshape(test_data, (test_data.shape[0], -1))
 
     # mean subtraction
-    test_data = test_data - np.mean(test_data, dtype=np.uint8, axis=0)
+    meanValue = np.mean(train_data, dtype=np.uint8, axis=0)
+    train_data = train_data - meanValue
+
+    # standard deviation normalization
+    #test_data = test_data / np.std(test_data,  dtype=np.uint8, axis=0)
+
+    '''
+    #   SVD whitening
+    cov = np.dot(test_data.T, test_data)/ test_data.shape[0]
+    U,S,V = np.linalg.svd(cov)
+    test_data_rot = np.dot(test_data, U)
+    '''
+    return train_data, meanValue
+
+def preprocess_test_data(test_data, ppMean):
+    ##
+    #   :param test_data: input vector of mx32x32x3 images
+    #   :return:
+    ##
+
+    # flattening the data into a row
+    # test_data = np.reshape(test_data, (test_data.shape[0], -1))
+
+    # mean subtraction
+    test_data = test_data - ppMean
 
     # standard deviation normalization
     #test_data = test_data / np.std(test_data,  dtype=np.uint8, axis=0)
