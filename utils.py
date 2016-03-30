@@ -118,10 +118,10 @@ def read_test_data(dat_file_name):
 
 # Visualize some examples from the dataset.
 # We show a few examples of training images from each class.
-def visualize_data(X_train, y_train):
+def visualize_data(X_train, y_train, num_samples):
     classes = ['plane', 'auto', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     num_classes = len(classes)
-    samples_per_class = 7
+    samples_per_class = num_samples
     for y, cls in enumerate(classes):
         indices = np.flatnonzero(y_train == y)
         indices = np.random.choice(indices, samples_per_class, replace=False)
@@ -132,7 +132,7 @@ def visualize_data(X_train, y_train):
             plt.axis('off')
             if i == 0:
                 plt.title(cls)
-    plt.savefig('cifar10_samples.pdf')
+    plt.savefig('CNN_samples.pdf')
     plt.close()
 
 
