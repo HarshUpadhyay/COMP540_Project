@@ -59,8 +59,12 @@ def save_test_data_as_vector(output_file_name, input_dir):
     X = []
     imageCount = 1
 
-    #print os.listdir(input_dir)
-    for img in os.listdir(input_dir):
+    inputFileList = []
+    for i in range(1,300001):
+        fileName = "{}.png".format(i)
+        inputFileList.append(fileName)
+
+    for img in inputFileList:
 
         if imageCount == 50000:
             print "Picking data for file number "+str(fileNumber) + "\n"
@@ -163,10 +167,10 @@ def preprocess_img_data(test_data):
     # test_data = np.reshape(test_data, (test_data.shape[0], -1))
 
     # mean subtraction
-    test_data = test_data - np.mean(test_data, axis=0)
+    test_data = test_data - np.mean(test_data, dtype=np.uint8, axis=0)
 
     # standard deviation normalization
-    test_data = test_data / np.std(test_data, axis=0)
+    #test_data = test_data / np.std(test_data,  dtype=np.uint8, axis=0)
 
     '''
     #   SVD whitening
