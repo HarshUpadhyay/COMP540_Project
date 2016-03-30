@@ -178,14 +178,15 @@ def preprocess_train_data(train_data):
     stdDev = np.std(train_data,  axis=0)
     train_data = train_data / stdDev
 
-    train_data = train_data.astype(np.float32)
-
-    '''
+   
+    """
     #   SVD whitening
     cov = np.dot(test_data.T, test_data)/ test_data.shape[0]
     U,S,V = np.linalg.svd(cov)
     test_data_rot = np.dot(test_data, U)
-    '''
+    """
+    train_data = train_data.astype(np.float32)
+
     return train_data, meanValue, stdDev
 
 def preprocess_test_data(test_data, ppMean, ppStdDev):
