@@ -21,7 +21,8 @@ nn = Classifier(
         Convolution("Rectifier", channels=8, kernel_shape=(3,3)),
         Layer("Softmax")],
     learning_rate=0.02,
-    n_iter=50)
+    n_iter=50,
+    regularize="L2")
 nn.fit(Xtrain, ytrain)
 
 pred = nn.predict(Xval)
