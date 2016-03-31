@@ -4,22 +4,24 @@ import numpy as np
 import image_utils
 
 
-#utils.save_training_data_as_vector("test.dat", "trainLabels.csv", "test")
+#utils.save_training_data_as_vector("tmp.dat", "trainLabels.csv", "tmp")
 
 X, y = utils.read_training_data('train.dat')
 
-#print len(X), len(y)
+print "size of the tmp dataset: x={} y={}\n".format(len(X), len(y))
 
 Xtrain, Xval = X[:40000], X[40000:]
-ytrain, yval = X[:40000], y[40000:]
+ytrain, yval = y[:40000], y[40000:]
+#Xtrain, Xval = X[:900], X[900:]
+#ytrain, yval = y[:900], y[900:]
 
-#print Xtrain[0][0][0]
 
 nn = Classifier(
     layers=[
-        Convolution("Rectifier", channels=16, kernel_shape=(5,5)),
+        Convolution("Rectifier", channels=8, kernel_shape=(3,3)),
         Layer("Softmax")],
-    n_iter=1000)
+    learning_rate=0.02,
+    n_iter=50)
 nn.fit(Xtrain, ytrain)
 
 pred = nn.predict(Xval)
