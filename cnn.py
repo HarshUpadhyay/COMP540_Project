@@ -21,15 +21,14 @@ print "Validation size = {}".format(len(yval))
 
 nn = Classifier(
     layers=[
-        Convolution("Rectifier", channels=8, kernel_shape=(3,3)),
-        Layer("Softmax")],
+        Convolution("Rectifier", name="layer1", channels=8, kernel_shape=(3,3), kernel_stride=(1,1), border_mode="full", pool_shape(2,2), pool_type="max", dropout=0.25),
+        Convolution("Rectifier", name="layer1", channels=8, kernel_shape=(3,3), kernel_stride=(1,1), border_mode="full", pool_shape(2,2), pool_type="max", dropout=0.25),
+        Convolution("Rectifier", name="layer1", channels=8, kernel_shape=(3,3), kernel_stride=(1,1), border_mode="full", pool_shape(2,2), pool_type="max", dropout=0.25),
+    ],
     learning_rate=0.02,
-<<<<<<< HEAD
-    n_iter=50)
-=======
     n_iter=100,
     regularize="L2")
->>>>>>> 60218740f0c36cbe6b58dfcea82ad37c6e24ed5b
+]
 nn.fit(Xtrain, ytrain)
 
 pred = nn.predict(Xval)
