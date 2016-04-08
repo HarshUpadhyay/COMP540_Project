@@ -6,7 +6,7 @@ import os
 from skimage.data import imread
 
 
-def save_training_data_as_vector(output_file_name, label_data, input_dir):
+def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_ordering="th"):
 
     ##
     #   1. reads All png files from disk as a vector of 32x32x3 integer matrices.
@@ -33,13 +33,19 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir):
 
     X = []
     y = []
-    for img in inputFileList:
-            
-        X.append(imread("{}/{}".format(input_dir,img)))
-        
-        y.append(label_dict[labels.readline().strip().split(",")[1]])
-                      
-        print "Reading {}".format(img)
+
+    if dim_ordering == "tf":
+        for img in inputFileList:
+            X.append(imread("{}/{}".format(input_dir, img)))
+            y.append(label_dict[labels.readline().strip().split(",")[1]])
+            print "Reading {}".format(img)
+    else:
+        for img in inputFileList:
+            x = imread("{}/{}".format(input_dir, img))
+            X.append(np.array(np.dsplit(x, 3)).reshape(3, 32, 32))
+            y.append(label_dict[labels.readline().strip().split(",")[1]])
+            print "Reading {}".format(img)
+
 
     dmp = open(output_file_name, 'w')
     dataValue, dataMean, dataStdDev = preprocess_train_data(np.array(X))
