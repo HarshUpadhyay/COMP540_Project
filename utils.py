@@ -185,7 +185,7 @@ def preprocess_train_data(train_data):
     U,S,V = np.linalg.svd(cov)
     test_data_rot = np.dot(test_data, U)
     """
-    train_data = train_data.astype(np.float32)
+    train_data = train_data.astype(np.uint8)
 
     return train_data, meanValue, stdDev
 

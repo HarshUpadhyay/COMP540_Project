@@ -10,7 +10,7 @@ X,y=utils.read_training_data('train.dat')
 
 print len(X), len(y)
 
-utils.save_test_data_as_vector("test", meanValue, stdDevValue)
+#utils.save_test_data_as_vector("test", meanValue, stdDevValue)
 
 
 #plt.imshow(X[0].astype('uint8'))
