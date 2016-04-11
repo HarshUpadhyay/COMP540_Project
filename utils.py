@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import cPickle
-import os
+import sys
 
 from skimage.data import imread
 
@@ -38,22 +38,22 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_or
         for img in inputFileList:
             X.append(imread("{}/{}".format(input_dir, img)))
             y.append(label_dict[labels.readline().strip().split(",")[1]])
-            print "Reading {}".format(img)
+            sys.stdout.write("\rReading {}".format(img))
     else:
         for img in inputFileList:
             x = imread("{}/{}".format(input_dir, img))
             X.append(np.array(np.dsplit(x, 3)).reshape(3, 32, 32))
             y.append(label_dict[labels.readline().strip().split(",")[1]])
-            print "Reading {}".format(img)
+            sys.stdout.write("\rReading {}".format(img))
 
 
     dmp = open(output_file_name, 'w')
     dataValue, dataMean, dataStdDev = preprocess_train_data(np.array(X))
-    cPickle.dump({'data': dataValue, 'labels': np.array(y)}, dmp)
-    #cPickle.dump({'data': (np.array(X)), 'labels': np.array(y)}, dmp)
+    #cPickle.dump({'data': dataValue, 'labels': np.array(y)}, dmp)
+    cPickle.dump({'data': (np.array(X)), 'labels': np.array(y)}, dmp)
     dmp.close()
     labels.close()
-
+    print "\ndone.\n"
     return dataMean, dataStdDev
 
 
@@ -200,7 +200,7 @@ def preprocess_test_data(test_data, ppMean, ppStdDev):
     #   :param test_data: input vector of mx32x32x3 images
     #   :return:
     ##
-
+    print "\nnormalizing data now...\n"
     # flattening the data into a row
     # test_data = np.reshape(test_data, (test_data.shape[0], -1))
 

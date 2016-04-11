@@ -1,11 +1,13 @@
+from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Convolution2D, MaxPooling2D
+from keras.layers.core import Dense, Dropout, Activation, Flatten
+from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
+from keras.utils import np_utils
 import utils
 from os import path
 
-dataset = "train.dat.notprocessed.dat"
+dataset = "train_keras_raw.dat"
 if path.isfile(dataset) == False:
     utils.save_training_data_as_vector(dataset, "trainLabels.csv", "train")
 
@@ -21,14 +23,6 @@ print "Training size = {}".format(len(y_train))
 print "Validation size = {}".format(len(y_val))
 
 
-from keras.datasets import cifar10
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Sequential
-from keras.layers.core import Dense, Dropout, Activation, Flatten
-from keras.layers.convolutional import Convolution2D, MaxPooling2D
-from keras.optimizers import SGD
-from keras.utils import np_utils
-
 batch_size = 32
 nb_classes = 10
 nb_epoch = 200
@@ -39,15 +33,9 @@ img_rows, img_cols = 32, 32
 # the CIFAR10 images are RGB
 img_channels = 3
 
-# the data, shuffled and split between train and test sets
-(X_train, y_train), (X_test, y_test) = cifar10.load_data()
-print('X_train shape:', X_train.shape)
-print(X_train.shape[0], 'train samples')
-print(X_test.shape[0], 'test samples')
-
 # convert class vectors to binary class matrices
 Y_train = np_utils.to_categorical(y_train, nb_classes)
-Y_test = np_utils.to_categorical(y_test, nb_classes)
+Y_val = np_utils.to_categorical(y_val, nb_classes)
 
 model = Sequential()
 
@@ -76,17 +64,15 @@ model.add(Activation('softmax'))
 # let's train the model using SGD + momentum (how original).
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy', optimizer=sgd)
-
 X_train = X_train.astype('float32')
-X_test = X_test.astype('float32')
+X_val = X_val.astype('float32')
 X_train /= 255
-X_test /= 255
-
+X_val /= 255
 if not data_augmentation:
     print('Not using data augmentation.')
     model.fit(X_train, Y_train, batch_size=batch_size,
               nb_epoch=nb_epoch, show_accuracy=True,
-              validation_data=(X_test, Y_test), shuffle=True)
+              validation_data=(X_val, Y_val), shuffle=True)
 else:
     print('Using real-time data augmentation.')
 
@@ -111,5 +97,5 @@ else:
     model.fit_generator(datagen.flow(X_train, Y_train, batch_size=batch_size),
                         samples_per_epoch=X_train.shape[0],
                         nb_epoch=nb_epoch, show_accuracy=True,
-                        validation_data=(X_test, Y_test),
+                        validation_data=(X_val, Y_val),
                         nb_worker=1)
