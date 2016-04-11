@@ -7,7 +7,7 @@ from keras.utils import np_utils
 import utils
 from os import path
 
-dataset = "train_keras_raw.dat"
+dataset = "train_keras_noNorm.dat"
 if path.isfile(dataset) == False:
     utils.save_training_data_as_vector(dataset, "trainLabels.csv", "train")
 
@@ -64,10 +64,9 @@ model.add(Activation('softmax'))
 # let's train the model using SGD + momentum (how original).
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy', optimizer=sgd)
-X_train = X_train.astype('float32')
-X_val = X_val.astype('float32')
 X_train /= 255
 X_val /= 255
+
 if not data_augmentation:
     print('Not using data augmentation.')
     model.fit(X_train, Y_train, batch_size=batch_size,
@@ -78,16 +77,16 @@ else:
 
     # this will do preprocessing and realtime data augmentation
     datagen = ImageDataGenerator(
-        featurewise_center=False,  # set input mean to 0 over the dataset
+        featurewise_center=True,  # set input mean to 0 over the dataset
         samplewise_center=False,  # set each sample mean to 0
-        featurewise_std_normalization=False,  # divide inputs by std of the dataset
+        featurewise_std_normalization=True,  # divide inputs by std of the dataset
         samplewise_std_normalization=False,  # divide each input by its std
-        zca_whitening=False,  # apply ZCA whitening
-        rotation_range=0,  # randomly rotate images in the range (degrees, 0 to 180)
+        zca_whitening=True,  # apply ZCA whitening
+        rotation_range=0.1,  # randomly rotate images in the range (degrees, 0 to 180)
         width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
         height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
         horizontal_flip=True,  # randomly flip images
-        vertical_flip=False)  # randomly flip images
+        vertical_flip=True)  # randomly flip images
 
     # compute quantities required for featurewise normalization
     # (std, mean, and principal components if ZCA whitening is applied)

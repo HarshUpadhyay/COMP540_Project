@@ -6,7 +6,7 @@ import sys
 from skimage.data import imread
 
 
-def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_ordering="th"):
+def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_ordering="th", num_samples=50000, do_normalize=False):
 
     ##
     #   1. reads All png files from disk as a vector of 32x32x3 integer matrices.
@@ -27,7 +27,8 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_or
     print "\nreading data now...\n"
     
     inputFileList = []
-    for i in range(1,50001):
+    num_samples += 1
+    for i in range(1, num_samples):
         fileName = "{}.png".format(i)
         inputFileList.append(fileName)
 
@@ -48,9 +49,8 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_or
 
 
     dmp = open(output_file_name, 'w')
-    dataValue, dataMean, dataStdDev = preprocess_train_data(np.array(X))
-    #cPickle.dump({'data': dataValue, 'labels': np.array(y)}, dmp)
-    cPickle.dump({'data': (np.array(X)), 'labels': np.array(y)}, dmp)
+    dataValue, dataMean, dataStdDev = preprocess_train_data(np.array(X), do_normalize)
+    cPickle.dump({'data': dataValue, 'labels': np.array(y)}, dmp)
     dmp.close()
     labels.close()
     print "\ndone.\n"
@@ -167,7 +167,7 @@ def subsample(num_training, num_validation, num_test, X_train, y_train, X_test, 
     return X_train, y_train, X_val, y_val, X_test, y_test
 
 
-def preprocess_train_data(train_data):
+def preprocess_train_data(train_data, do_normalize = True):
     ##
     #   :param test_data: input vector of mx32x32x3 images
     #   :return:
@@ -175,15 +175,13 @@ def preprocess_train_data(train_data):
 
     # flattening the data into a row
     # test_data = np.reshape(test_data, (test_data.shape[0], -1))
-
-    # mean subtraction
     meanValue = np.mean(train_data, axis=0)
-    train_data = train_data - meanValue
-
-    # standard deviation normalization
     stdDev = np.std(train_data,  axis=0)
-    train_data = train_data / stdDev
-
+    if do_normalize:
+        # mean subtraction
+        train_data = train_data - meanValue
+        # standard deviation normalization
+        train_data = train_data / stdDev
    
     """
     #   SVD whitening
@@ -191,8 +189,7 @@ def preprocess_train_data(train_data):
     U,S,V = np.linalg.svd(cov)
     test_data_rot = np.dot(test_data, U)
     """
-    train_data = train_data.astype(np.uint8)
-
+    train_data = train_data.astype(np.float32)
     return train_data, meanValue, stdDev
 
 def preprocess_test_data(test_data, ppMean, ppStdDev):
