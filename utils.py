@@ -27,7 +27,7 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_or
     print "\nreading data now...\n"
     
     inputFileList = []
-    for i in range(1,5001):
+    for i in range(1,50001):
         fileName = "{}.png".format(i)
         inputFileList.append(fileName)
 
