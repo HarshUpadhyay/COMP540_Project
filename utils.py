@@ -53,7 +53,7 @@ def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_or
     cPickle.dump({'data': dataValue, 'labels': np.array(y)}, dmp)
     dmp.close()
     labels.close()
-    print "\ndone.\n"
+    print "\ndone saving dataset vectors.\n"
     return dataMean, dataStdDev
 
 
@@ -178,6 +178,7 @@ def preprocess_train_data(train_data, do_normalize = True):
     meanValue = np.mean(train_data, axis=0)
     stdDev = np.std(train_data,  axis=0)
     if do_normalize:
+        sys.stdout.write("\nnormalizing. No Whitening done.\r")
         # mean subtraction
         train_data = train_data - meanValue
         # standard deviation normalization
@@ -190,6 +191,7 @@ def preprocess_train_data(train_data, do_normalize = True):
     test_data_rot = np.dot(test_data, U)
     """
     train_data = train_data.astype(np.float32)
+    sys.stdout.write("\rdone!\n")
     return train_data, meanValue, stdDev
 
 def preprocess_test_data(test_data, ppMean, ppStdDev):

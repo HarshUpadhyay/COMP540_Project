@@ -4,9 +4,9 @@ import numpy as np
 from os import path
 import image_utils
 
-dataset = "train_processed_tf.dat"
+dataset = "train_cnn.dat"
 if path.isfile(dataset) == False:
-    utils.save_training_data_as_vector(dataset, "trainLabels.csv", "train", dim_ordering="tf" )
+    utils.save_training_data_as_vector(dataset, "trainLabels.csv", "train", dim_ordering="tf", do_normalize=True)
 
 
 print "Begin training by reading the pickled dataset"
