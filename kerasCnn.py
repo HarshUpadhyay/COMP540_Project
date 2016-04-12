@@ -1,23 +1,29 @@
+import utils
+import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
 from keras.utils import np_utils
-import utils
 from os import path
 
 dataset = "train_keras_noNorm.dat"
+model_arch_name = "keras_arch"
+model_weights_name = "keras_weights"
+split = 0.98
+
 if path.isfile(dataset) == False:
-    utils.save_training_data_as_vector(dataset, "trainLabels.csv", "train")
+    utils.save_training_data_as_vector(dataset, "trainLabels.csv", "train", )
 
 
 print "Begin training by reading the pickled dataset"
 X, y = utils.read_training_data(dataset)
 
 print "shape of the dataset and  labels: x={} y={}\n".format(X.shape, y.shape)
-X_train, y_train = X[:49000], y[:49000]
-X_val, y_val = X[49000:], y[49000:]
+mask = int(X.shape[0] * split)
+X_train, y_train = X[:mask], y[:mask]
+X_val, y_val = X[mask:], y[mask:]
 
 print "Training size = {}".format(len(y_train))
 print "Validation size = {}".format(len(y_val))
@@ -78,15 +84,15 @@ else:
     # this will do preprocessing and realtime data augmentation
     datagen = ImageDataGenerator(
         featurewise_center=False,  # set input mean to 0 over the dataset
-        samplewise_center=True,  # set each sample mean to 0
+        samplewise_center=False,  # set each sample mean to 0
         featurewise_std_normalization=False,  # divide inputs by std of the dataset
-        samplewise_std_normalization=True,  # divide each input by its std
-        zca_whitening=True,  # apply ZCA whitening
-        rotation_range=180,  # randomly rotate images in the range (degrees, 0 to 180)
+        samplewise_std_normalization=False,  # divide each input by its std
+        zca_whitening=False,  # apply ZCA whitening
+        rotation_range=0,  # randomly rotate images in the range (degrees, 0 to 180)
         width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
         height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
         horizontal_flip=True,  # randomly flip images
-        vertical_flip=True)  # randomly flip images
+        vertical_flip=False)  # randomly flip images
 
     # compute quantities required for featurewise normalization
     # (std, mean, and principal components if ZCA whitening is applied)
@@ -99,6 +105,24 @@ else:
                         validation_data=(X_val, Y_val),
                         nb_worker=1)
 
-    import cPickle
+    print "\nnow, lets do some prediction on the validation set!\n"
+    pred = model.predict(X_val, verbose=1).astype(float)
+    pred = np.argmax(pred, axis=1)
+
+    accuracy = np.mean((y_val == pred).astype(float)) * 100
+    str = "##########################################"
+    print "\n{}\naccuracy on validation data: {}%\n{}\n\n".format(str,accuracy,str)
+
     #save model
-    cPickle.dump(model, "keras1.model");
+    print "saving model..."
+    json_string = model.to_json()
+    arch = open("{}.json".format(model_arch_name), 'w')
+    arch.write(json_string)
+    arch.close()
+    model.save_weights("{}.h5".format(model_weights_name),overwrite=True)
+    print "\nDone saving model.\n " \
+          "Here they are:\n" \
+          "Model Architecture: {}\n" \
+          "Model Weights {}\n"\
+        .format(model_arch_name,
+                model_weights_name)

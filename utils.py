@@ -191,7 +191,7 @@ def preprocess_train_data(train_data, do_normalize = True):
     test_data_rot = np.dot(test_data, U)
     """
     train_data = train_data.astype(np.float32)
-    sys.stdout.write("\rdone!\n")
+    sys.stdout.write("\r\t\t...done!\n")
     return train_data, meanValue, stdDev
 
 def preprocess_test_data(test_data, ppMean, ppStdDev):
