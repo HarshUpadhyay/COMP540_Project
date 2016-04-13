@@ -124,6 +124,8 @@ else:
         if i!=0:
             
             # load model weights from previous round
+
+            #model = model_from_json(open('keras_arch_tmp.json').read())
             model.load_weights("{}{}.h5".format(model_weights_name, flag))
             # reset flag
             flag = (flag + 1)%2
@@ -136,10 +138,10 @@ else:
                             nb_worker=1)
          #save model
          #print "saving model..."
-         #json_string = model.to_json()
-         #arch = open("{}.json".format(model_arch_name), 'w')
-         #arch.write(json_string)
-         #arch.close()
+         json_string = model.to_json()
+         arch = open("{}{}.json".format(model_arch_name, flag), 'w')
+         arch.write(json_string)
+         arch.close()
          model.save_weights("{}{}.h5".format(model_weights_name, flag),overwrite=True)
          #print "\nDone saving model.\n " \
              #"Here they are:\n" \
