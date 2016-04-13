@@ -33,7 +33,7 @@ print "Validation size = {}".format(len(y_val))
 batch_size = 32
 nb_classes = 10
 nb_epoch = 5
-nb_dataModelRun = 40
+nb_dataModelRun = 2
 
 data_augmentation = True
 
@@ -136,19 +136,19 @@ else:
                             nb_epoch=nb_epoch, show_accuracy=True,
                             validation_data=(X_val, Y_val),
                             nb_worker=1)
-         #save model
-         #print "saving model..."
-         json_string = model.to_json()
-         arch = open("{}{}.json".format(model_arch_name, flag), 'w')
-         arch.write(json_string)
-         arch.close()
-         model.save_weights("{}{}.h5".format(model_weights_name, flag),overwrite=True)
-         #print "\nDone saving model.\n " \
-             #"Here they are:\n" \
-             #"Model Architecture: {}\n" \
-             #"Model Weights {}\n"\
-                 #.format(model_arch_name,
-                         #model_weights_name)
+        #save model
+        #print "saving model..."
+        json_string = model.to_json()
+        arch = open("{}{}.json".format(model_arch_name, flag), 'w')
+        arch.write(json_string)
+        arch.close()
+        model.save_weights("{}{}.h5".format(model_weights_name, flag),overwrite=True)
+        #print "\nDone saving model.\n " \
+            #"Here they are:\n" \
+            #"Model Architecture: {}\n" \
+            #"Model Weights {}\n"\
+            #.format(model_arch_name,
+        #model_weights_name)
 
 
     print "\nnow, lets do some prediction on the validation set!\n"
