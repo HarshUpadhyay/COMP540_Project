@@ -6,6 +6,7 @@ from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
 from keras.utils import np_utils
+from keras.regularizers import l2, activity_l2
 from os import path
 
 dataset = "train_keras_noNorm.dat"
@@ -61,15 +62,16 @@ model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 
 model.add(Flatten())
-model.add(Dense(512))
+model.add(Dense(256))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
+
 model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
 
 # let's train the model using SGD + momentum (how original).
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(loss='categorical_crossentropy', optimizer=sgd)
+model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=["accuracy"])
 X_train /= 255
 X_val /= 255
 
@@ -91,7 +93,7 @@ else:
         rotation_range=0,  # randomly rotate images in the range (degrees, 0 to 180)
         width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
         height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
-        horizontal_flip=True,  # randomly flip images
+        horizontal_flip=False,  # randomly flip images
         vertical_flip=False)  # randomly flip images
 
     # compute quantities required for featurewise normalization
