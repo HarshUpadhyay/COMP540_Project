@@ -14,8 +14,8 @@ X /= 255
 
 #selecting subset
 X_test, y_test = X[mask:], y[mask:]
-model = model_from_json(open('keras_arch_tmp.json').read())
-model.load_weights('keras_weights_tmp.h5')
+model = model_from_json(open('keras_arch0.json').read())
+model.load_weights('keras_weights0.h5')
 
 pred = model.predict(X_test, verbose=1)
 pred = np.argmax(pred, axis=1)

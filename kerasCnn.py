@@ -9,7 +9,7 @@ from keras.utils import np_utils
 from keras.regularizers import l2, activity_l2
 from os import path
 
-dataset = "train_keras_noNorm.dat"
+dataset = "train_keras_tmp.dat"
 model_arch_name = "keras_arch"
 model_weights_name = "keras_weights"
 split = 0.98
@@ -32,8 +32,8 @@ print "Validation size = {}".format(len(y_val))
 
 batch_size = 32
 nb_classes = 10
-nb_epoch = 5
-nb_dataModelRun = 2
+nb_epoch = 10
+nb_dataModelRun = 1
 
 data_augmentation = True
 
