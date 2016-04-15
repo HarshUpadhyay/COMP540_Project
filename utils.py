@@ -2,17 +2,11 @@ import numpy as np
 #import matplotlib.pyplot as plt
 import cPickle
 import sys
-
 from skimage.data import imread
-
-from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
-from keras.utils import np_utils
-from keras.regularizers import l2, activity_l2
-from os import path
 
 def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_ordering="th", num_samples=50000, do_normalize=False):
 
