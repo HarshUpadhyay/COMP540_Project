@@ -228,8 +228,19 @@ def preprocess_test_data(test_data, ppMean, ppStdDev):
     return test_data
 
 
-def give_keras_model():
+def give_keras_model(img_channels, img_rows, img_cols, nb_classes):
     
+    
+    batch_size = 32
+    nb_classes = 10
+    nb_epoch = 10
+    nb_dataModelRun = 1
+
+    # input image dimensions
+    #img_rows, img_cols = 32, 32
+    # the CIFAR10 images are RGB
+    #img_channels = 3
+
     model = Sequential()
 
     model.add(Convolution2D(32, 3, 3, border_mode='same',input_shape=(img_channels, img_rows, img_cols)))
