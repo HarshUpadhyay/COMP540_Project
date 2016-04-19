@@ -1,0 +1,15 @@
+set terminal  pdf enhanced color
+set output "LogLoss.pdf"
+set xlabel "# of epochs"
+set ylabel "Loss"
+set xrange [0:300]
+set yrange [0:2]
+set datafile separator "&"
+set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 7 ps 0.05 
+set style line 2 lc rgb '#dd181f' lt 1 lw 1 pt 7 ps 0.05 
+set title "Accuracy on Training and Validation datasets"
+plot "Log1Data.txt" using 1:2 title "Training data (1st K-Submission)",  "Log1Data.txt" using 1:3 title "Validation data  (1st K-Submission)" 
+plot "Log4Data.txt" using 1:2 title "Training data (2nd K-Submission)",  "Log4Data.txt" using 1:3 title "Validation data (2nd K-Submission)" 
+plot "Log7Data.txt" using 1:2 title "Training data (3rd K-Submission)",  "Log7Data.txt" using 1:3 title "Validation data (3rd K-Submission)"
+plot "Log8Data.txt" using 1:2 title "Training data (4th K-Submission)",  "Log8Data.txt" using 1:3 title "Validation data (4th K-Submission)" 
+plot "OldMachineLog1Data.txt" using 1:2 title "Training data (Old Machine)",  "OldMachineLog1Data.txt" using 1:3 title "Validation data (Old Machine)" 
