@@ -2,18 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cPickle
 import sys
+<<<<<<< HEAD
 from keras.utils.visualize_util import plot
 
+=======
+>>>>>>> bd07954d2440851ed094168b2f26a5ddfd8a4a4b
 from skimage.data import imread
-
-from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
-from keras.utils import np_utils
-from keras.regularizers import l2, activity_l2
-from os import path
 
 def save_training_data_as_vector(output_file_name, label_data, input_dir, dim_ordering="th", num_samples=50000, do_normalize=False):
 
@@ -231,11 +229,7 @@ def preprocess_test_data(test_data, ppMean, ppStdDev):
 
 def give_keras_model(img_channels, img_rows, img_cols, nb_classes):
     
-    
-    batch_size = 32
     nb_classes = 10
-    nb_epoch = 10
-    nb_dataModelRun = 1
 
     # input image dimensions
     #img_rows, img_cols = 32, 32

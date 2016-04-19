@@ -10,7 +10,6 @@ from keras.regularizers import l2, activity_l2
 from os import path
 
 dataset = "train_keras_tmp.dat"
-model_arch_name = "keras_arch"
 model_weights_name = "keras_weights"
 split = 0.98
 
@@ -20,6 +19,7 @@ if path.isfile(dataset) == False:
 
 print "Begin training by reading the pickled dataset"
 X, y = utils.read_training_data(dataset)
+X /= 255
 
 print "shape of the dataset and  labels: x={} y={}\n".format(X.shape, y.shape)
 mask = int(X.shape[0] * split)
@@ -53,8 +53,6 @@ model = utils.give_keras_model(img_channels, img_rows, img_cols, nb_classes)
 # let's train the model using SGD + momentum (how original).
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=["accuracy"])
-X_train /= 255
-X_val /= 255
 
 if not data_augmentation:
     print('Not using data augmentation.')
@@ -96,8 +94,6 @@ else:
         if i!=0:
             
             # load model weights from previous round
-
-            #model = model_from_json(open('keras_arch_tmp.json').read())
             model.load_weights("{}{}.h5".format(model_weights_name, flag))
             # reset flag
             flag = (flag + 1)%2
@@ -110,17 +106,11 @@ else:
                             nb_worker=1)
         #save model
         #print "saving model..."
-        json_string = model.to_json()
-        arch = open("{}{}.json".format(model_arch_name, flag), 'w')
-        arch.write(json_string)
-        arch.close()
         model.save_weights("{}{}.h5".format(model_weights_name, flag),overwrite=True)
         #print "\nDone saving model.\n " \
             #"Here they are:\n" \
-            #"Model Architecture: {}\n" \
             #"Model Weights {}\n"\
-            #.format(model_arch_name,
-        #model_weights_name)
+            #.format(model_weights_name)
 
 
     print "\nnow, lets do some prediction on the validation set!\n"
