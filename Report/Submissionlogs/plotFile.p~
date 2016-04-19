@@ -1,0 +1,10 @@
+set terminal  pdf enhanced color
+set output "quality-CT-10-5.pdf"
+set xlabel "# of samples"
+set ylabel "Error (logscale)"
+set xrange [0:40000]
+set logscale y
+set datafile separator "&"
+set style line 1 lc rgb '#0060ad' lt 1 lw 1 pt 7 ps 0.05 
+set style line 2 lc rgb '#dd181f' lt 1 lw 1 pt 7 ps 0.05 
+plot "ErrorData_output-ClinicalTrial_10_5_5_10-0_0.txt" using 1:2 title "Infer" with linespoints ls 1, \
