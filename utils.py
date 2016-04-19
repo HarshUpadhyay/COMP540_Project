@@ -1,7 +1,8 @@
 import numpy as np
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import cPickle
 import sys
+from keras.utils.visualize_util import plot
 
 from skimage.data import imread
 
@@ -277,3 +278,6 @@ def give_keras_model(img_channels, img_rows, img_cols, nb_classes):
     model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=["accuracy"])
 
     return model
+
+model.load_weights('keras_weights0.h5')
+
