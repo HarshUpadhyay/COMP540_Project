@@ -1,1 +1,28 @@
-To modify readme file. 
+Kaggle In-Class Project for Object Recognition in tiny images:
+===============================================================
+
+Team: Katch22
+members: Harsh Upadhyay(hu3) and Suguman Bansal(sb55)
+
+This Readme file is just an introduction to the various files present in this project that we made use of
+from time to time during our search for the best classifier for the CIFAR10 image set.
+
+The folder also contains a directory called Output which contains codes, Logs and weights of our models generated as we
+worked.
+
+Output Folder:
+==============
+1. Folders named attempt<X> which contain some results that we didn't submit to kaggle due to their poor accuracy on the validation set
+2. Folders named kaggle_sub<X> contain data and codes from our kaggle submissions
+3. O1 and O2 are older data
+4. The "Underfit" folders contain data for when our CNN had too many layers.
+
+Root Folder:
+=============
+> cnn.py : this is code for a CNN created using the scikit-neuralnetworks library. We gave up on it since we never got more than 10% validation accuracy
+> kerasCnn.py : this one trains a CNN using the training data and has options to augment the input data
+> utils.py : contains the util functions used by kerasCnn.py, ensemble.py, visualize_weights.py, predict.py and predict_single.py
+> image_utils.py : contains a couple of functions reused from hw3 and only used by the cnn.py file. Not used for our final model that had keras
+> visualize_weights.py : script to generate visualizations of the Convolution Layer weights in the CNN.
+> predictions#.csv : contains csv prediction files uploaded to kaggle at different points. They are also there in the Output folders
+> Other files are just there.
