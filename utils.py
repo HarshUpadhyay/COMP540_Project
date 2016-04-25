@@ -12,7 +12,7 @@ def give_keras_model(img_channels, img_rows, img_cols, nb_classes):
 
     model = Sequential()
 
-    model.add(Convolution2D(32, 3, 3, border_mode='same',input_shape=(img_channels, img_rows, img_cols)))
+    model.add(Convolution2D(32, 3, 3, border_mode='same',input_shape=(img_channels, img_rows, img_cols), name="conv_1"))
     model.add(Activation('relu'))
     model.add(Convolution2D(32, 3, 3))
     model.add(Activation('relu'))

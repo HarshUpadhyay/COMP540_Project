@@ -1,12 +1,8 @@
 import utils
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Sequential
-from keras.layers.core import Dense, Dropout, Activation, Flatten
-from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
 from keras.utils import np_utils
-from keras.regularizers import l2, activity_l2
 from os import path
 
 dataset = "train_keras_noNorm.dat"

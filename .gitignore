@@ -6,7 +6,6 @@
 *.iml
 out
 gen
-*.dat
 train
 *.7z
 trainLabels.csv
