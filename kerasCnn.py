@@ -9,7 +9,7 @@ from keras.utils import np_utils
 from keras.regularizers import l2, activity_l2
 from os import path
 
-dataset = "train_keras_tmp.dat"
+dataset = "train_keras_noNorm.dat"
 model_weights_name = "keras_weights"
 split = 0.98
 
@@ -19,6 +19,7 @@ if path.isfile(dataset) == False:
 
 print "Begin training by reading the pickled dataset"
 X, y = utils.read_training_data(dataset)
+X -= np.mean(X)
 X /= 255
 
 print "shape of the dataset and  labels: x={} y={}\n".format(X.shape, y.shape)

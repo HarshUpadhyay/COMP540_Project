@@ -1,0 +1,59 @@
+Begin training by reading the pickled dataset
+shape of the dataset and  labels: x=(50000, 3, 32, 32) y=(50000,)
+Training size = 40000
+Validation size = 10000
+training model: 0
+
+now, lets do some prediction on the validation set!
+
+##########################################
+accuracy on validation data: 92.58%
+##########################################
+
+saving model weights...
+
+Done saving weights for wt_ensemble_member0.
+training model: 1
+
+now, lets do some prediction on the validation set!
+
+##########################################
+accuracy on validation data: 92.77%
+##########################################
+
+saving model weights...
+
+Done saving weights for wt_ensemble_member1.
+training model: 2
+
+now, lets do some prediction on the validation set!
+
+##########################################
+accuracy on validation data: 92.69%
+##########################################
+
+saving model weights...
+
+Done saving weights for wt_ensemble_member2.
+training model: 3
+
+now, lets do some prediction on the validation set!
+
+##########################################
+accuracy on validation data: 93.51%
+##########################################
+
+saving model weights...
+
+Done saving weights for wt_ensemble_member3.
+training model: 4
+
+now, lets do some prediction on the validation set!
+
+##########################################
+accuracy on validation data: 92.7%
+##########################################
+
+saving model weights...
+
+Done saving weights for wt_ensemble_member4.
