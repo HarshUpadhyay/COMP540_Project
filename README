@@ -26,3 +26,5 @@ Root Folder:
 > visualize_weights.py : script to generate visualizations of the Convolution Layer weights in the CNN.
 > predictions#.csv : contains csv prediction files uploaded to kaggle at different points. They are also there in the Output folders
 > Other files are just there.
+
+The Latest Model with 85.25% accuracy was generated using ensemble.py and The latest copy of the code is in the root directory.
